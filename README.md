@@ -41,6 +41,9 @@ public class MainActivity extends AppCompatActivity {
 }
 ```
 
+---
+
+
 ## DoTransfer Activity
 
 ### Credentials are passed over http/plaintext
@@ -52,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
 Vulnerable code:
 
-```
+```java
 public String doInBackground(String... params) {
             HttpClient httpclient = new DefaultHttpClient();
             HttpPost httppost = new HttpPost(DoTransfer.this.protocol + DoTransfer.this.serverip + ":" + DoTransfer.this.serverport + "/dotransfer");
@@ -80,7 +83,7 @@ public String doInBackground(String... params) {
 
 Vulnerable code:
 
-```
+```java
 
 this.uname = getIntent().getStringExtra("uname");
         File fileToCheck = new File(Environment.getExternalStorageDirectory(), "Statements_" + this.uname + ".html");
@@ -138,6 +141,8 @@ PoC file `Statements_jack.html`:
 
 ```
 
+---
+
 ## ChangePassword Activity
 
 ### Account tackover via user accepted intent `uname`
@@ -176,9 +181,12 @@ public class MainActivity extends AppCompatActivity {
 
 ## Broadcast receiver MyBroadcastReceiver is accepting user provided variables in broadcast
 
-### Leaks other user passwords via text message
+### Leaks other user passwords via text message due to app needing to restart after password change
 
+```xml
 <provider android:name="com.android.insecurebankv2.TrackUserContentProvider" android:exported="true" android:authorities="com.android.insecurebankv2.TrackUserContentProvider"/>
+```
+
 
 Vulnerable code:
 
@@ -238,6 +246,8 @@ public class MainActivity extends AppCompatActivity {
 
 ```
 
+---
+
 ## TrackUserContentProvider
 
 ### Exported ContentProvider discloses all users
@@ -250,9 +260,9 @@ public class MainActivity extends AppCompatActivity {
 
 Vulnerable code:
 
-Hard coded db information and content:// paths makes disclosing database information very easy.
+Hard coded db information and `content://` paths makes disclosing database information very easy.
 
-```
+```java
 public class TrackUserContentProvider extends ContentProvider {
     static final Uri CONTENT_URI = Uri.parse(URL);
     static final String CREATE_DB_TABLE = " CREATE TABLE names (id INTEGER PRIMARY KEY AUTOINCREMENT,  name TEXT NOT NULL);";
